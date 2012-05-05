@@ -12,3 +12,8 @@ Synopsis:
     -h, --help                      Show this message
 ```
 
+goog will color the output a little if STDOUT is the tty.
+
+![screenshot](https://github.com/danchoi/goog/raw/master/screenshot.png)
+
+
