@@ -24,10 +24,6 @@ DATE RANGE options for -d option:
     m   last month
     y   last year
 
-goog 0.0.4
-http://github.com/danchoi/goog
-Author: Daniel Choi <dhchoi@gmail.com>
-
 ```
 
 goog will color the output a little if STDOUT is the tty. 
