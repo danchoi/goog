@@ -4,19 +4,16 @@ require 'nokogiri'
 require 'cgi'
 require 'yaml'
 require 'uri'
+require 'optparse'
 
-if ARGV[0] =~ /^-h|--help/
-  require 'goog'
-  puts <<END
-Usage: goog [-n pages] [-d date range type] [query]
-
-Synopsis:
-    -n [pages]                      Return n pages of results
-    -d [date range type]            Limit results to date range (see below for codes)
-    -h, --help                      Show this message
-
-Date range types for -d option:
-  
+options = {}
+OptionParser.new do |opts|
+  opts.banner = "Usage: goog [options] [query]"
+  opts.on("-h", "--help", "Show this message") { 
+    require 'goog'
+    puts <<END
+#{opts}
+DATE RANGE options for -d option:
     h   last hour
     d   last day (24 hours)
     w   last week
@@ -27,12 +24,12 @@ goog #{Goog::VERSION}
 http://github.com/danchoi/goog
 Author: Daniel Choi <dhchoi@gmail.com>
 END
-  exit
-end
-
-pages = ARGV[0] =~ /^-n/ ? (ARGV.shift && ARGV.shift[/\d+/,0].to_i) : 1
-date_range = ARGV[0] =~ /^-d/ ? (ARGV.shift && ARGV.shift[/[hdwmy]/,0]) : nil
-
+    exit 
+  }
+  opts.on("-d", '--date-range [DATE RANGE]', 'Show results for date range. See below for options.') {|dr| options[:date_range] = dr }
+  opts.on("-n", '--num-pages [NUM PAGES]', 'Show NUM PAGES pages of results') {|pages| options[:pages] = pages.to_i }
+  opts.on("-c", '--color', 'Force color output') {options[:color] = true}
+end.parse!
 query = ARGV.join(' ')
 unless query
   abort "Please provide a search query"
@@ -45,10 +42,10 @@ if RUBY_VERSION !~ /^1.9/
   abort "Requires Ruby 1.9"
 end
 query = "/search?q=#{CGI.escape query}"
-if date_range 
-  query += "&as_qdr=#{date_range}"
+if options[:date_range]
+  query += "&as_qdr=#{options[:date_range]}"
 end
-(1..pages).each do |page| 
+(1..(options[:pages] || 1)).each do |page| 
   if query.nil?
     exit
   end
@@ -75,7 +72,7 @@ end
                 end
               end
     number = (page - 1) * 10 + (index + 1)
-    res = if STDOUT.tty?
+    res = if STDOUT.tty? || options[:color]
       ["#{number}. \e[36m#{title}\e[0m", excerpt, "\e[35m#{link }\e[0m"]
     else
       ["#{number}. #{title}", excerpt, link]
