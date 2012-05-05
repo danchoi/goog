@@ -64,7 +64,7 @@ end
     next unless li.at('h3 a')
     href = li.at('h3 a')['href']
     link = ((h = href[/^\/url\?q=([^&]+)/, 1]) && URI.unescape(h)) || href
-    if link !~ /^http:/
+    if link !~ /^https?:/
       link = "http://google.com#{link}"
     end
     title = li.at('h3 a').inner_text
