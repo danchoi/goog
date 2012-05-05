@@ -54,7 +54,8 @@ end
   doc = Nokogiri::HTML resp, nil, 'iso-8859-1'
   doc.search('ol li.g').each_with_index {|li, index|
     next unless li.at('h3 a')
-    link = li.at('h3 a')['href'].sub(/^\/url\?q=/, '')
+    href = li.at('h3 a')['href']
+    link = href[/^\/url\?q=([^&]+)/, 1] || href
     if link !~ /^http:/
       link = "http://google.com#{link}"
     end
