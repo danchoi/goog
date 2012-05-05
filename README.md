@@ -11,20 +11,22 @@ A simple tool to search Google from the command line and show search results in 
 ## Usage
 
 ```
-Usage: goog [-n pages] [-d date range type] [query]
+Usage: goog [options] [query]
+    -h, --help                       Show this message
+    -d, --date-range [DATE RANGE]    Show results for date range. See below for options.
+    -n, --num-pages [NUM PAGES]      Show NUM PAGES pages of results
+    -c, --color                      Force color output
 
-Synopsis:
-    -n [pages]                      Return n pages of results
-    -d [date range type]            Limit results to date range (see below for codes)
-    -h, --help                      Show this message
-
-Date range types for -d option:
-  
+DATE RANGE options for -d option:
     h   last hour
     d   last day (24 hours)
     w   last week
     m   last month
     y   last year
+
+goog 0.0.4
+http://github.com/danchoi/goog
+Author: Daniel Choi <dhchoi@gmail.com>
 
 ```
 
