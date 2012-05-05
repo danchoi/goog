@@ -68,7 +68,7 @@ query = CGI.escape query
     else
       ["#{number}. #{title}", excerpt, link]
     end
-    puts res.select {|line| line =~ /\S/}
+    puts res.compact
     puts
   }
 end
