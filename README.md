@@ -37,7 +37,7 @@ Pure command line mode:
 
 ![screenshot](https://github.com/danchoi/goog/raw/master/screenshot.png)
 
-goog in Vim mode. (Search command: `goog -v -d m boston hackatnon`)
+goog in Vim mode. (Search command: `goog -v -d m boston hackathon`)
 
 You can move the cursor on or before the link you want to
 open in your browser, and then press `<leader>o` to open it.
