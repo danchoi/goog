@@ -31,6 +31,9 @@ goog will color the output a little if STDOUT is the tty.
 
 Unlike Google in the web browser, you can redirect goog's output like any Unix text stream.
 
+NOTE: Very soon I'll release a Vim plugin version that can be invoked within a Vim session.
+
+
 ## Screenshot
 
 Pure command line mode:
