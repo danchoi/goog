@@ -55,7 +55,7 @@ end
   doc.search('ol li.g').each_with_index {|li, index|
     next unless li.at('h3 a')
     href = li.at('h3 a')['href']
-    link = href[/^\/url\?q=([^&]+)/, 1] || href
+    link = ((h = href[/^\/url\?q=([^&]+)/, 1]) && URI.unescape(h)) || href
     if link !~ /^http:/
       link = "http://google.com#{link}"
     end
