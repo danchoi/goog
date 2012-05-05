@@ -11,11 +11,21 @@ A simple tool to search Google from the command line and show search results in 
 ## Usage
 
 ```
-Usage: goog [-n pages] [query]
+Usage: goog [-n pages] [-d date range type] [query]
 
 Synopsis:
     -n [pages]                      Return n pages of results
+    -d [date range type]            Limit results to date range (see below for codes)
     -h, --help                      Show this message
+
+Date range types for -d option:
+  
+    h   last hour
+    d   last day (24 hours)
+    w   last week
+    m   last month
+    y   last year
+
 ```
 
 goog will color the output a little if STDOUT is the tty. 

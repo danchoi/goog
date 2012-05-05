@@ -8,11 +8,20 @@ require 'uri'
 if ARGV[0] =~ /^-h|--help/
   require 'goog'
   puts <<END
-Usage: goog [-n pages] [query]
+Usage: goog [-n pages] [-d date range type] [query]
 
 Synopsis:
     -n [pages]                      Return n pages of results
+    -d [date range type]            Limit results to date range (see below for codes)
     -h, --help                      Show this message
+
+Date range types for -d option:
+  
+    h   last hour
+    d   last day (24 hours)
+    w   last week
+    m   last month
+    y   last year
 
 goog #{Goog::VERSION}
 http://github.com/danchoi/goog
@@ -22,6 +31,7 @@ END
 end
 
 pages = ARGV[0] =~ /^-n/ ? (ARGV.shift && ARGV.shift[/\d+/,0].to_i) : 1
+date_range = ARGV[0] =~ /^-d/ ? (ARGV.shift && ARGV.shift[/[hdwmy]/,0]) : nil
 
 query = ARGV.join(' ')
 unless query
@@ -35,6 +45,9 @@ if RUBY_VERSION !~ /^1.9/
   abort "Requires Ruby 1.9"
 end
 query = "/search?q=#{CGI.escape query}"
+if date_range 
+  query += "&as_qdr=#{date_range}"
+end
 (1..pages).each do |page| 
   if query.nil?
     exit
