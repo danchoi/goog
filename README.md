@@ -3,6 +3,11 @@
 A simple tool to search Google from the command line and show search results in plain text.
 
 
+## Install
+
+    gem install goog
+
+
 ## Usage
 
 ```
