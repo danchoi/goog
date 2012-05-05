@@ -1,0 +1,76 @@
+#!/usr/bin/env ruby
+# encoding: utf-8
+require 'nokogiri'
+require 'cgi'
+require 'yaml'
+require 'uri'
+
+
+if ARGV[0] =~ /^-h|--help/
+  puts <<END
+Usage: goog [-n pages] [query]
+
+Synopsis:
+    -n [pages]                      Return n pages of results
+    -h, --help                      Show this message
+
+goog 0.1.0 
+http://github.com/danchoi/goog
+Author: Daniel Choi <dhchoi@gmail.com>
+END
+  exit
+end
+
+pages = ARGV[0] =~ /^-n/ ? (ARGV.shift && ARGV.shift[/\d+/,0].to_i) : 1
+
+query = ARGV.join(' ')
+unless query
+  abort "Please provide a search query"
+end
+CACHE = "#{ENV['HOME']}/.goog.cache.yml"
+unless `which tidy` =~ /tidy/
+  abort "No tidy found. Please install tidy."
+end
+if RUBY_VERSION !~ /^1.9/
+  abort "Requires Ruby 1.9"
+end
+query = CGI.escape query
+
+(1..pages).each do |page| 
+  q = page == 1 ? query : "#{query}&start=#{page * 10}"
+  curl = "curl -s -A Mozilla http://www.google.com/search?q=#{q} | tidy --wrap 0 -indent -ashtml --merge-divs yes 2>/dev/null"
+  resp = %x{#{curl}}
+  doc = Nokogiri::HTML resp
+  doc.search('ol li.g').each_with_index {|li, index|
+    next unless li.at('h3 a')
+    link = li.at('h3 a')['href'].sub(/^\/url\?q=/, '')
+    if link !~ /^http:/
+      link = "http://google.com#{link}"
+    end
+    title = li.at('h3 a').inner_text
+    description = li.at('div.s')
+    excerpt = if description
+                description.search('span').remove 
+                excerpt = begin 
+                  s = description.inner_text.strip
+                  s.force_encoding('iso-8859-1')
+                  s.encode!('utf-8', undef: :replace, invalid: :replace)
+                  s.gsub(/\s{2,}/, ' ')
+                rescue
+                  puts "ERROR"
+                  puts description
+                  puts $!
+                end
+              end
+    number = (page - 1) * 10 + (index + 1)
+    res = if STDOUT.tty?
+      ["#{number}. \e[36m#{title}\e[0m", excerpt, "\e[35m#{link }\e[0m"]
+    else
+      ["#{number}. #{title}", excerpt, link]
+    end
+    puts res.select {|line| line =~ /\S/}
+    puts
+  }
+end
+
+

@@ -1,3 +1,14 @@
+# goog
 
+A simple tool to search Google from the command line.
 
-This is stub of a project for a command line tool to do Google searches.
+## Usage
+
+```
+Usage: goog [-n pages] [query]
+
+Synopsis:
+    -n [pages]                      Return n pages of results
+    -h, --help                      Show this message
+```
+
