@@ -6,6 +6,7 @@ require 'yaml'
 require 'uri'
 require 'optparse'
 
+
 options = {}
 OptionParser.new do |opts|
   opts.banner = "Usage: goog [options] [query]"
@@ -29,6 +30,13 @@ END
   opts.on("-d", '--date-range [DATE RANGE]', 'Show results for date range. See below for options.') {|dr| options[:date_range] = dr }
   opts.on("-n", '--num-pages [NUM PAGES]', 'Show NUM PAGES pages of results') {|pages| options[:pages] = pages.to_i }
   opts.on("-c", '--color', 'Force color output') {options[:color] = true}
+  opts.on("-v", '--vim', 'Open results in Vim and bind <leader>o to open URL on or after cursor') {
+    require 'tempfile'
+    options[:vim] = true
+    $vimscript_file = File.expand_path(File.join(File.dirname(__FILE__), '..', 'vim', 'goog.vim'))
+    $tempfile = Tempfile.new('goog')
+    $stdout = $tempfile
+  }
 end.parse!
 query = ARGV.join(' ')
 unless query
@@ -73,18 +81,24 @@ end
                 end
               end
     number = (page - 1) * 10 + (index + 1)
-    res = if STDOUT.tty? || options[:color]
+    res = if !options[:vim] && (STDOUT.tty? || options[:color])
       ["#{number}. \e[36m#{title}\e[0m", excerpt, "\e[35m#{link }\e[0m"]
     else
       ["#{number}. #{title}", excerpt, link]
     end
-    puts res.compact
-    puts
+    $stdout.puts res.compact
+    $stdout.puts
   }
+
   # find next page link
   # <a href="/search?q=why+the+lucky+stiff&amp;hl=en&amp;ie=UTF-8&amp;prmd=ivns&amp;ei=K6akT9bRBeaM6QHjifmwBA&amp;start=10&amp;sa=N" style="text-align:left"><span style="display:block;margin-left:53px">Next</span></a>
+
   next_page_href = (nextspan = doc.at("//span[contains(child::text(),'Next')]")) && nextspan.parent[:href]
   query = next_page_href
 end
 
+if options[:vim]
+  $stdout.close
+  exec "vim -S #$vimscript_file #{$tempfile.path}"
+end
 

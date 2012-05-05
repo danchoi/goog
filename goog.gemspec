@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
 
   s.rubyforge_project = "goog"
 
-  s.files         = ['bin/goog', 'lib/goog.rb']
+  s.files         = ['bin/goog', 'lib/goog.rb', 'vim/goog.vim']
   s.executables   = ['goog']
   # s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   # s.require_paths = ["lib"]

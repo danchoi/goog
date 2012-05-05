@@ -16,6 +16,7 @@ Usage: goog [options] [query]
     -d, --date-range [DATE RANGE]    Show results for date range. See below for options.
     -n, --num-pages [NUM PAGES]      Show NUM PAGES pages of results
     -c, --color                      Force color output
+    -v, --vim                        Open results in Vim and bind <leader>o to open URL on or after cursor
 
 DATE RANGE options for -d option:
     h   last hour
