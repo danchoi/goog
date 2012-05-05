@@ -1,5 +1,5 @@
 syntax region h1  start="^\d\+\."       end="\($\)" 
-syntax region href  start="^http:"     end="\($\)" 
+syntax region href  start="^https\?:"     end="\($\)" 
 highlight link h1     Identifier
 highlight link href   Constant
 hi Identifier	term=NONE cterm=NONE gui=NONE ctermfg=LightCyan
