@@ -8,8 +8,18 @@ hi Constant  term=NONE cterm=NONE  gui=NONE ctermfg=Magenta
 let s:http_link_pattern = 'https\?:[^ >)\]]\+'
 
 let g:gui_web_browser = system("echo -n $(which gnome-open || which open)")
-let g:text_web_browser = system("echo -n $(which elinks || which links || which lynx)")
+if ! exists("g:text_web_browser")
+  if executable("elinks") 
+    let  g:text_web_browser = 'elinks -dump -no-numbering'
+  elseif executable("lynx")
+    let  g:text_web_browser = 'lynx -dump -nonumbers'
+  elseif executable("links") 
+    let  g:text_web_browser = 'links -dump'
+  endif
+end
 
+
+let s:web_page_bufname = "GoogBrowser"
 func! s:open_href_under_cursor(text_browser)
   let res = search(s:http_link_pattern, 'cw')
   if res != 0
@@ -18,11 +28,17 @@ func! s:open_href_under_cursor(text_browser)
       let command = g:gui_web_browser . " " . shellescape(href) . " "
       call system(command)
     else
-      let command = g:text_web_browser . " --dump  " . shellescape(href) . " "
+      let command = g:text_web_browser . ' ' .  shellescape(href) . " "
       echom command
       let result = system(command)
-      new WebPage
+      if bufexists(s:web_page_bufname) && bufwinnr(s:web_page_bufname) != -1
+        exec bufwinnr(s:web_page_bufname)."wincmd w"    
+      else
+        exec "new ".s:web_page_bufname
+      endif
       silent! put! =result
+      silent! 1put! ='URL: '.href 
+      silent! 2put! =''
       setlocal buftype=nofile 
       normal 1G
     endif
