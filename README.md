@@ -16,7 +16,7 @@ Usage: goog [options] [query]
     -d, --date-range [DATE RANGE]    Show results for date range. See below for options.
     -n, --num-pages [NUM PAGES]      Show NUM PAGES pages of results
     -c, --color                      Force color output
-    -v, --vim                        Open results in Vim and bind <leader>o to open URL on or after cursor
+    -v, --vim                        Open results in Vim. See below for key mappings. 
 
 DATE RANGE options for -d option:
     h   last hour
@@ -25,11 +25,16 @@ DATE RANGE options for -d option:
     m   last month
     y   last year
 
+VIM KEY MAPPINGS
+    <leader>o       open URL on or after cursor in default external web browser
+    <leader>O       open URL on or after cursor in split Vim window using elinks, links, or lynx
+
 ```
 
 goog will color the output a little if STDOUT is the tty. 
 
 Unlike Google in the web browser, you can redirect goog's output like any Unix text stream.
+
 
 NOTE: Very soon I'll release a Vim plugin version that can be invoked within a Vim session.
 

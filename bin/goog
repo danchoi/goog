@@ -21,6 +21,10 @@ DATE RANGE options for -d option:
     m   last month
     y   last year
 
+VIM KEY MAPPINGS
+    <leader>o       open URL on or after cursor in default external web browser
+    <leader>O       open URL on or after cursor in split Vim window using elinks, links, or lynx
+
 goog #{Goog::VERSION}
 http://github.com/danchoi/goog
 Author: Daniel Choi <dhchoi@gmail.com>
