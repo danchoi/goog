@@ -37,7 +37,7 @@ END
   opts.on("-v", '--vim', 'Open results in Vim and bind <leader>o to open URL on or after cursor') {
     require 'tempfile'
     options[:vim] = true
-    $vimscript_file = File.expand_path(File.join(File.dirname(__FILE__), '..', 'vim', 'goog.vim'))
+    $vimscript_file = File.expand_path(File.join(File.dirname(__FILE__), '..', 'plugin', 'goog.vim'))
     $tempfile = Tempfile.new('goog')
     $stdout = $tempfile
   }
@@ -105,6 +105,6 @@ end
 
 if options[:vim]
   $stdout.close
-  exec "vim -S #$vimscript_file -c 'call g:Goog_set_up_buffer()' #{$tempfile.path}"
+  exec "vim -S #$vimscript_file -c 'call g:Goog_set_up_search_results_buffer()' #{$tempfile.path}"
 end
 

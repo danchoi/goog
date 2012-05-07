@@ -3,10 +3,6 @@
 " Maintainer:	Daniel Choi <dhchoi@gmail.com>
 " License: MIT License (c) 2012 Daniel Choi
 
-if exists("g:SoyWikiLoaded") || &cp || version < 700
-  finish
-endif
-let g:GoogLoaded = 1
 
 let s:http_link_pattern = '^https\?:[^ >)\]]\+'
 
@@ -65,20 +61,33 @@ func! s:find_next_link(backward)
 endfunc
 
 
-func! g:Goog_set_up_buffer()
+func! g:Goog_set_up_search_results_buffer()
   syntax region h1  start="^\d\+\."       end="\($\)" 
   syntax region href  start="^https\?:"     end="\($\)" 
   highlight link h1     Identifier
   highlight link href   Constant
   hi Identifier	term=NONE cterm=NONE gui=NONE ctermfg=LightCyan
   hi Constant  term=NONE cterm=NONE  gui=NONE ctermfg=Magenta
-
-
-  nnoremap <leader>o :call <SID>open_href_under_cursor(0)<CR>
-  nnoremap <leader>O :call <SID>open_href_under_cursor(1)<CR>
+  nnoremap <buffer> <leader>o :call <SID>open_href_under_cursor(0)<CR>
+  nnoremap <buffer> <leader>O :call <SID>open_href_under_cursor(1)<CR>
   noremap <buffer> <c-j> :call <SID>find_next_link(0)<CR>
   noremap <buffer> <c-k> :call <SID>find_next_link(1)<CR>
 endfunc 
 
+func! s:run_Goog_search(query)
+  if !executable("goog") 
+    echom "You don't have goog installed. Please gem install goog and try again."
+    finish
+  endif
+  let res=system("goog ".shellescape(a:query))
+  exec "vsplit ".s:web_page_bufname
+  silent! put! =res
+  silent! 1put! ='query: 'query
+  silent! 2put! =''
+  setlocal buftype=nofile 
+  normal 1G
+  call g:Goog_set_up_search_results_buffer()
+endfunc
 
+command -nargs=* Goog call <SID>run_Goog_search(<q-args>)
 
