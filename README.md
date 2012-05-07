@@ -1,14 +1,18 @@
 # goog
 
-goog let your search Google from the command line and show search results in
-plain text.
+goog is a command line tool that lets you perform Google searches from the
+command line. Along with your query, you can specify the number of pages of
+results you want and the time range you are interested in. 
 
-Unlike Google in the web browser, you can redirect goog's output like any Unix text stream.
+You can output the result in simple, colored plain text in the shell, or you
+can browse the results in Vim, where you are supplied with Vim key bindings to
+quickly open any URL in the results in a web browser. 
 
-goog also works as a Vim plugin, giving you a :Goog command to perform Google
-searches without leaving Vim. 
+goog can also install itself as a Vim plugin, giving you the power to :Goog
+Google inside Vim.
 
-goog will color the output a little if STDOUT is the tty. 
+Link to github project and installation instructions:
+https://github.com/danchoi/goog
 
 ## Screenshot
 
