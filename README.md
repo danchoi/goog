@@ -1,6 +1,27 @@
 # goog
 
-A simple tool to search Google from the command line and show search results in plain text.
+goog let your search Google from the command line and show search results in
+plain text.
+
+Unlike Google in the web browser, you can redirect goog's output like any Unix text stream.
+
+goog also works as a Vim plugin, giving you a :Goog command to perform Google
+searches without leaving Vim. 
+
+goog will color the output a little if STDOUT is the tty. 
+
+## Screenshot
+
+Pure command line mode:
+
+![screenshot](https://github.com/danchoi/goog/raw/master/screenshot.png)
+
+goog in Vim mode. (Search command: `goog -v -d m boston hackathon`)
+
+You can move the cursor on or before the link you want to
+open in your browser, and then press `<leader>o` to open it.
+
+![screenshot](https://github.com/danchoi/goog/raw/master/screenshot-vim.png)
 
 
 ## Install
@@ -16,7 +37,8 @@ Usage: goog [options] [query]
     -d, --date-range [DATE RANGE]    Show results for date range. See below for options.
     -n, --num-pages [NUM PAGES]      Show NUM PAGES pages of results
     -c, --color                      Force color output
-    -v, --vim                        Open results in Vim. See below for key mappings. 
+    -v, --vim                        Open results in Vim and bind <leader>o to open URL on or after cursor
+    -i, --install-plugin             Install Goog as a Vim plugin
 
 DATE RANGE options for -d option:
     h   last hour
@@ -29,28 +51,24 @@ VIM KEY MAPPINGS
     <leader>o       open URL on or after cursor in default external web browser
     <leader>O       open URL on or after cursor in split Vim window using elinks, links, or lynx
 
+VIM PLUGIN COMMANDS
+
+    :Goog [query]
+
+      where query is any of the flags and arguments you can pass to the command
+      line version, except for -v.
+
+goog will run the Google search and print matches with syntax coloring in a
+split Vim buffer.
+
+In the GoogSearchResults buffer:
+
+    CTRL-j          jumps to the next URL
+    CTRL-k          jumps to the previous URL
+    <leader>o       open URL on or after cursor in default external web browser
+    <leader>O       open URL on or after cursor in split Vim window using elinks, links, or lynx
+
 ```
-
-goog will color the output a little if STDOUT is the tty. 
-
-Unlike Google in the web browser, you can redirect goog's output like any Unix text stream.
-
-
-NOTE: Very soon I'll release a Vim plugin version that can be invoked within a Vim session.
-
-
-## Screenshot
-
-Pure command line mode:
-
-![screenshot](https://github.com/danchoi/goog/raw/master/screenshot.png)
-
-goog in Vim mode. (Search command: `goog -v -d m boston hackathon`)
-
-You can move the cursor on or before the link you want to
-open in your browser, and then press `<leader>o` to open it.
-
-![screenshot](https://github.com/danchoi/goog/raw/master/screenshot-vim.png)
 
 ## MIT License 
 

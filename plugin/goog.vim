@@ -18,7 +18,7 @@ if ! exists("g:text_web_browser")
 end
 
 
-let s:web_page_bufname = "GoogBrowser"
+let s:web_page_bufname = "GoogWeb"
 
 func! s:open_href_under_cursor(text_browser)
   let res = search(s:http_link_pattern, 'cw')
@@ -32,9 +32,9 @@ func! s:open_href_under_cursor(text_browser)
       echom command
       let result = system(command)
       if bufexists(s:web_page_bufname) && bufwinnr(s:web_page_bufname) != -1
-        exec bufwinnr(s:web_page_bufname)."wincmd "    
+        exec bufwinnr(s:web_page_bufname)."wincmd w "
       else
-        exec "vsplit ".s:web_page_bufname
+        exec "split ".s:web_page_bufname
       endif
       silent! put! =result
       silent! 1put! ='URL: '.href 
@@ -75,12 +75,13 @@ func! g:Goog_set_up_search_results_buffer()
 endfunc 
 
 func! s:run_Goog_search(query)
+  let g:Goog_running_in_vim = 1
   if !executable("goog") 
     echom "You don't have goog installed. Please gem install goog and try again."
     finish
   endif
   let res=system("goog ".shellescape(a:query))
-  exec "vsplit ".s:web_page_bufname
+  exec "split GoogSearchResults"
   silent! put! =res
   silent! 1put! ='query: 'query
   silent! 2put! =''
