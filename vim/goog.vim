@@ -5,7 +5,7 @@ highlight link href   Constant
 hi Identifier	term=NONE cterm=NONE gui=NONE ctermfg=LightCyan
 hi Constant  term=NONE cterm=NONE  gui=NONE ctermfg=Magenta
 
-let s:http_link_pattern = 'https\?:[^ >)\]]\+'
+let s:http_link_pattern = '^https\?:[^ >)\]]\+'
 
 let g:gui_web_browser = system("echo -n $(which gnome-open || which open)")
 if ! exists("g:text_web_browser")
@@ -20,6 +20,7 @@ end
 
 
 let s:web_page_bufname = "GoogBrowser"
+
 func! s:open_href_under_cursor(text_browser)
   let res = search(s:http_link_pattern, 'cw')
   if res != 0
@@ -45,7 +46,25 @@ func! s:open_href_under_cursor(text_browser)
   end
 endfunc
 
+func! s:find_next_link(backward)
+  let n = 0
+  " don't wrap
+  if a:backward == 1 
+    normal lb
+    let result = search(s:http_link_pattern, 'Wb') 
+  else
+    let result = search(s:http_link_pattern, 'W')
+  endif
+  if (result == 0) 
+    return ""
+  end
+  return 
+endfunc
+
+
 nnoremap <leader>o :call <SID>open_href_under_cursor(0)<CR>
 nnoremap <leader>O :call <SID>open_href_under_cursor(1)<CR>
+noremap <buffer> <c-j> :call <SID>find_next_link(0)<CR>
+noremap <buffer> <c-k> :call <SID>find_next_link(1)<CR>
 
 " http://www.padrinorb.com/pages/why
