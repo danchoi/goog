@@ -11,8 +11,6 @@ quickly open any URL in the results in a web browser.
 goog can also install itself as a Vim plugin, giving you the power to :Goog
 Google inside Vim.
 
-Link to github project and installation instructions:
-https://github.com/danchoi/goog
 
 ## Screenshot
 
