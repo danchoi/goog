@@ -32,9 +32,9 @@ func! s:open_href_under_cursor(text_browser)
       echom command
       let result = system(command)
       if bufexists(s:web_page_bufname) && bufwinnr(s:web_page_bufname) != -1
-        exec bufwinnr(s:web_page_bufname)."wincmd w"    
+        exec bufwinnr(s:web_page_bufname)."wincmd "    
       else
-        exec "new ".s:web_page_bufname
+        exec "vsplit ".s:web_page_bufname
       endif
       silent! put! =result
       silent! 1put! ='URL: '.href 
