@@ -1,9 +1,12 @@
-syntax region h1  start="^\d\+\."       end="\($\)" 
-syntax region href  start="^https\?:"     end="\($\)" 
-highlight link h1     Identifier
-highlight link href   Constant
-hi Identifier	term=NONE cterm=NONE gui=NONE ctermfg=LightCyan
-hi Constant  term=NONE cterm=NONE  gui=NONE ctermfg=Magenta
+" Vim script that makes Vim a search results browser
+" http://github.com/danchoi/goog
+" Maintainer:	Daniel Choi <dhchoi@gmail.com>
+" License: MIT License (c) 2012 Daniel Choi
+
+if exists("g:SoyWikiLoaded") || &cp || version < 700
+  finish
+endif
+let g:GoogLoaded = 1
 
 let s:http_link_pattern = '^https\?:[^ >)\]]\+'
 
@@ -62,9 +65,20 @@ func! s:find_next_link(backward)
 endfunc
 
 
-nnoremap <leader>o :call <SID>open_href_under_cursor(0)<CR>
-nnoremap <leader>O :call <SID>open_href_under_cursor(1)<CR>
-noremap <buffer> <c-j> :call <SID>find_next_link(0)<CR>
-noremap <buffer> <c-k> :call <SID>find_next_link(1)<CR>
+func! g:Goog_set_up_buffer()
+  syntax region h1  start="^\d\+\."       end="\($\)" 
+  syntax region href  start="^https\?:"     end="\($\)" 
+  highlight link h1     Identifier
+  highlight link href   Constant
+  hi Identifier	term=NONE cterm=NONE gui=NONE ctermfg=LightCyan
+  hi Constant  term=NONE cterm=NONE  gui=NONE ctermfg=Magenta
 
-" http://www.padrinorb.com/pages/why
+
+  nnoremap <leader>o :call <SID>open_href_under_cursor(0)<CR>
+  nnoremap <leader>O :call <SID>open_href_under_cursor(1)<CR>
+  noremap <buffer> <c-j> :call <SID>find_next_link(0)<CR>
+  noremap <buffer> <c-k> :call <SID>find_next_link(1)<CR>
+endfunc 
+
+
+

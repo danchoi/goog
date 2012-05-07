@@ -6,7 +6,7 @@ require 'yaml'
 require 'uri'
 require 'optparse'
 
-
+orig_query = "query: #{ARGV.join(' ')}\n\n"
 options = {}
 OptionParser.new do |opts|
   opts.banner = "Usage: goog [options] [query]"
@@ -47,12 +47,14 @@ unless query
   abort "Please provide a search query"
 end
 
+$stdout.puts orig_query
 unless `which tidy` =~ /tidy/
   abort "No tidy found. Please install tidy."
 end
 if RUBY_VERSION !~ /^1.9/
   abort "Requires Ruby 1.9"
 end
+
 query = "/search?q=#{CGI.escape query}"
 if options[:date_range]
   query += "&as_qdr=#{options[:date_range]}"
@@ -103,6 +105,6 @@ end
 
 if options[:vim]
   $stdout.close
-  exec "vim -S #$vimscript_file #{$tempfile.path}"
+  exec "vim -S #$vimscript_file -c 'call g:Goog_set_up_buffer()' #{$tempfile.path}"
 end
 
