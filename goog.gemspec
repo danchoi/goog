@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.name        = "goog"
   s.version     = Goog::VERSION
   s.platform    = Gem::Platform::RUBY
-  s.required_ruby_version = '>= 1.9.0'
+  s.required_ruby_version = '>= 1.8.7'
 
   s.authors     = ["Daniel Choi"]
   s.email       = ["dhchoi@gmail.com"]

@@ -64,6 +64,14 @@ END
     puts "Done. Type goog -h for Vim commands."
     exit
   }
+  opts.on('--version', 'Show version') {|dr| 
+    require 'goog'
+    puts <<END
+goog #{Goog::VERSION}
+http://github.com/danchoi/goog
+Author: Daniel Choi <dhchoi@gmail.com>
+END
+  }
 end.parse!
 query = ARGV.join(' ')
 unless query
@@ -71,9 +79,6 @@ unless query
 end
 
 $stdout.puts orig_query
-unless `which tidy` =~ /tidy/
-  abort "No tidy found. Please install tidy."
-end
 if RUBY_VERSION !~ /^1.9/
   abort "Requires Ruby 1.9"
 end
@@ -86,7 +91,7 @@ end
   if query.nil?
     exit
   end
-  curl = "curl -s -A Mozilla 'http://www.google.com#{query}' | tidy --wrap 0 -indent -ashtml --merge-divs yes 2>/dev/null"
+  curl = "curl -s -A Mozilla 'http://www.google.com#{query}'"
   resp = %x{#{curl}}
   doc = Nokogiri::HTML resp, nil, 'iso-8859-1'
   doc.search('ol li.g').each_with_index {|li, index|
