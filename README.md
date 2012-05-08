@@ -8,8 +8,9 @@ You can output the result in simple, colored plain text in the shell, or you
 can browse the results in Vim, where you are supplied with Vim key bindings to
 quickly open any URL in the results in a web browser. 
 
-goog can also install itself as a Vim plugin, giving you the power to :Goog
-Google inside Vim.
+goog can also install itself as a Vim plugin, giving you the power to run and
+browse Google searches inside Vim. If you have `elinks` installed, you can even
+read the webpages returned by the Google search inside your Vim session.
 
 
 ## Screenshot
@@ -71,6 +72,29 @@ In the GoogSearchResults buffer:
     <leader>O       open URL on or after cursor in split Vim window using elinks, links, or lynx
 
 ```
+
+## Motivation
+
+I wrote `goog` for the same reason I wrote
+[vmail](https://github.com/danchoi/vmail),
+[poddb](http://danielchoi.com/software/poddb_client.html), and
+[vitunes](https://github.com/danchoi/vitunes): I believe that the command line
+and a plain text editor like Vim is a much more flexible, powerful, and productive
+environment for using a computer than the web browser is.
+
+They are more powerful for many reasons, but one of the most important is that
+both Vim and command line allow programs to interoperate with other programs
+much more easily than applications in the web browser.  You can append the
+results from goog to a text file for later perusal, or you can write another program
+to take goog's output and scrape all the webpages it returns for a particular query 
+and generate a PDF document with a table of contents, or a Kindle ebook. 
+
+You can automate all this much more easily too when you are working with
+command line tools. No more manual application switching or
+selecting/copying/pasting drudgery.
+
+This is just the tip of the iceberg.
+
 
 ## MIT License 
 
