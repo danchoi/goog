@@ -90,5 +90,5 @@ func! s:run_Goog_search(query)
   call g:Goog_set_up_search_results_buffer()
 endfunc
 
-command -nargs=* Goog call <SID>run_Goog_search(<q-args>)
+command! -nargs=* Goog call <SID>run_Goog_search(<q-args>)
 
