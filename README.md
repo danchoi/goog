@@ -79,11 +79,9 @@ I wrote `goog` for the same reason I wrote
 [vitunes](https://github.com/danchoi/vitunes): I believe that the command line,
 supplemented by a Unix-style plain text editor like Vim, is in general a much
 more powerful, productive, empowering, and creative environment for using a
-computer than the web browser is.
-
-
-This is just the tip of the iceberg.
-
+computer than the web browser is.  In short, I follow the [Unix
+philosophy](http://www.faqs.org/docs/artu/ch01s06.html) when it comes to 
+the software tools I use.
 
 ## MIT License 
 
