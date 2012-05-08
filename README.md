@@ -19,7 +19,7 @@ Pure command line mode:
 
 ![screenshot](https://github.com/danchoi/goog/raw/master/screenshot.png)
 
-goog as a Vim plugin, showing search results at the bottom, and a web pages opened inside 
+goog as a Vim plugin, showing search results at the bottom, and a webpage opened inside 
 the Vim session with the goog keybinding `<leader>O`.
 
 ![screenshot](https://github.com/danchoi/goog/raw/master/screenshot-vim.png)
