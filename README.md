@@ -78,20 +78,11 @@ In the GoogSearchResults buffer:
 I wrote `goog` for the same reason I wrote
 [vmail](https://github.com/danchoi/vmail),
 [poddb](http://danielchoi.com/software/poddb_client.html), and
-[vitunes](https://github.com/danchoi/vitunes): I believe that the command line
-and a plain text editor like Vim is a much more flexible, powerful, and productive
-environment for using a computer than the web browser is.
+[vitunes](https://github.com/danchoi/vitunes): I believe that the command line,
+supplemented by a Unix-style plain text editor like Vim, is in general a much
+more powerful, productive, empowering, and creative environment for using a
+computer than the web browser is.
 
-They are more powerful for many reasons, but one of the most important is that
-both Vim and command line allow programs to interoperate with other programs
-much more easily than applications in the web browser.  You can append the
-results from goog to a text file for later perusal, or you can write another program
-to take goog's output and scrape all the webpages it returns for a particular query 
-and generate a PDF document with a table of contents, or a Kindle ebook. 
-
-You can automate all this much more easily too when you are working with
-command line tools. No more manual application switching or
-selecting/copying/pasting drudgery.
 
 This is just the tip of the iceberg.
 
