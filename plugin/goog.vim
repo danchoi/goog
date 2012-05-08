@@ -33,7 +33,7 @@ func! s:open_href_under_cursor(text_browser)
       call system(command)
     else
       let command = g:text_web_browser . ' ' .  shellescape(href) . " "
-      echom command
+      " echom command
       let result = system(command)
       if bufexists(s:web_page_bufname) && bufwinnr(s:web_page_bufname) != -1
         exec bufwinnr(s:web_page_bufname)."wincmd w "
