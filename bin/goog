@@ -71,6 +71,7 @@ goog #{Goog::VERSION}
 http://github.com/danchoi/goog
 Author: Daniel Choi <dhchoi@gmail.com>
 END
+    exit
   }
 end.parse!
 query = ARGV.join(' ')

@@ -3,6 +3,10 @@
 " Maintainer:	Daniel Choi <dhchoi@gmail.com>
 " License: MIT License (c) 2012 Daniel Choi
 
+if exist('g:GoogLoaded')
+  finish
+endif
+let g:GoogLoaded = 1
 
 let s:http_link_pattern = '^https\?:[^ >)\]]\+'
 
