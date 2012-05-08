@@ -19,10 +19,8 @@ Pure command line mode:
 
 ![screenshot](https://github.com/danchoi/goog/raw/master/screenshot.png)
 
-goog in Vim mode. (Search command: `goog -v -d m boston hackathon`)
-
-You can move the cursor on or before the link you want to
-open in your browser, and then press `<leader>o` to open it.
+goog as a Vim plugin, showing search results at the bottom, and a web pages opened inside 
+the Vim session with the goog keybinding `<leader>O`.
 
 ![screenshot](https://github.com/danchoi/goog/raw/master/screenshot-vim.png)
 
@@ -37,7 +35,7 @@ open in your browser, and then press `<leader>o` to open it.
 ```
 Usage: goog [options] [query]
     -h, --help                       Show this message
-    -d, --date-range [DATE RANGE]    Show results for date range. See below for options.
+    
     -n, --num-pages [NUM PAGES]      Show NUM PAGES pages of results
     -c, --color                      Force color output
     -v, --vim                        Open results in Vim and bind <leader>o to open URL on or after cursor
