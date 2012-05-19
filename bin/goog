@@ -52,8 +52,9 @@ END
   opts.on("-d", '--date-range [DATE RANGE]', 'Show results for date range. See below for options.') {|dr| options[:date_range] = dr }
   opts.on("-n", '--num-pages [NUM PAGES]', 'Show NUM PAGES pages of results') {|pages| options[:pages] = pages.to_i }
   opts.on("-c", '--color', 'Force color output') {options[:color] = true}
+  opts.on("-x", '--expand', 'Expand all results into web page text') { options[:expand] = true }
   opts.on("-e", '--elinks', 'Open results in elinks') { options[:elinks] = true }
-  opts.on("-l", '--less', 'Open results in less; loads all web pages in results in buffers') { options[:less] = true }
+  opts.on("-l", '--less', 'Open results in less') { options[:less] = true }
   opts.on("-v", '--vim', 'Open results in Vim and bind <leader>o to open URL on or after cursor') { options[:vim] = true }
   opts.on("-i", '--install-plugin', 'Install Goog as a Vim plugin') {
     puts "Installing goog.vim into your ~/.vim/plugin directory."
@@ -92,6 +93,7 @@ query = "/search?q=#{CGI.escape query}"
 if options[:date_range]
   query += "&as_qdr=#{options[:date_range]}"
 end
+pages = []
 (1..(options[:pages] || 1)).each do |page| 
   if query.nil?
     exit
@@ -127,8 +129,15 @@ end
     else
       ["#{number}. #{title}", excerpt, link].compact
     end
+    puts '-' * 80
     $stdout.puts res
     $stdout.puts
+    if options[:expand]
+      $stderr.puts "Fetching #{title}: #{link}"
+      puts "#{title}: #{link}"
+      puts `elinks -dump -no-numbering '#{link}'`
+    end
+    puts
   }
 
   # find next page link
@@ -144,6 +153,7 @@ if options[:vim]
 end
 
 if options[:less]
+  $stdout.close
   exec "less -R #{$tempfile.path}"
 end
 

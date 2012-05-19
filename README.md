@@ -38,7 +38,9 @@ Usage: goog [options] [query]
     
     -n, --num-pages [NUM PAGES]      Show NUM PAGES pages of results
     -c, --color                      Force color output
+    -x, --expand                     Expand all results into web page text
     -e, --elinks                     Open results in elinks
+    -l, --less                       Open results in less
     -v, --vim                        Open results in Vim and bind <leader>o to open URL on or after cursor
     -i, --install-plugin             Install Goog as a Vim plugin
 
