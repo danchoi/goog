@@ -54,9 +54,9 @@ END
   opts.on("-c", '--color', 'Force color output') {options[:color] = true}
   opts.on("-x", '--expand', 'Expand all results into web page text') { options[:expand] = true }
   opts.on("-e", '--elinks', 'Open results in elinks') { options[:elinks] = true }
-  opts.on("-l", '--less', 'Open results in less') { options[:less] = true }
+  opts.on("-i", '--interactive', 'Prompt for selection') { options[:interactive] = true }
   opts.on("-v", '--vim', 'Open results in Vim and bind <leader>o to open URL on or after cursor') { options[:vim] = true }
-  opts.on("-i", '--install-plugin', 'Install Goog as a Vim plugin') {
+  opts.on('--install-plugin', 'Install Goog as a Vim plugin') {
     puts "Installing goog.vim into your ~/.vim/plugin directory."
     `cp #{$vimscript_file} #{ENV['HOME']}/.vim/plugin/`
     puts "Done. Type goog -h for Vim commands."
@@ -73,7 +73,7 @@ END
   }
 end.parse!
 
-if options[:elinks] || options[:vim] || options[:less]
+if options[:elinks] || options[:vim] || options[:interactive]
   require 'tempfile'
   $tempfile = Tempfile.new('goog')
   $stdout = $tempfile
@@ -125,7 +125,7 @@ links = []
     number = (page - 1) * 10 + (index + 1)
     res = if options[:elinks]
       %Q| <p>#{number}. <strong>#{title}</strong><br/>#{excerpt}<br/><a href='#{link}'>#{link}</a></p> |
-    elsif !options[:vim] && (STDOUT.tty? || options[:less] || options[:color])
+    elsif !options[:vim] && (STDOUT.tty? || options[:interactive] || options[:color])
       ["#{number}. \e[36m#{title}\e[0m", excerpt, "\e[35m#{link }\e[0m"].compact
     else
       ["#{number}. #{title}", excerpt, link].compact
@@ -153,7 +153,7 @@ if options[:vim]
   exec "vim -S #$vimscript_file -c 'call g:Goog_set_up_search_results_buffer()' #{$tempfile.path}"
 end
 
-if options[:less]
+if options[:interactive]
   $stdout.close
   $stdout = STDOUT
   loop {

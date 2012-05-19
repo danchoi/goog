@@ -5,16 +5,16 @@ command line. Along with your query, you can specify the number of pages of
 results you want and the time range you are interested in. 
 
 You can output the result in simple, colored plain text in the shell, or you
-can browse the results in less (with ways to pipe webpage text to other Unix
-programs) or Vim (where you are supplied with Vim key bindings to
+can browse in interactive mode (with ways to pipe webpage text to other Unix
+programs) or in Vim mode (where you are supplied with Vim key bindings to
 quickly open any URL in the results in a web browser). 
 
 goog can also install itself as a Vim plugin, giving you the power to run and
 browse Google searches inside Vim. If you have `elinks` installed, you can even
 read the webpages returned by the Google search inside your Vim session.
 
-Personally my favorite way to use goog is the less-mode (use the -l or --less
-flag).
+Personally my favorite way to use goog is the interactive mode (use the -i or
+--interactive flag).
 
 ## Screenshot
 
@@ -38,14 +38,15 @@ the Vim session with the goog keybinding `<leader>O`.
 ```
 Usage: goog [options] [query]
     -h, --help                       Show this message
-    
+    -d, --date-range [DATE RANGE]    Show results for date range. See below for options.
     -n, --num-pages [NUM PAGES]      Show NUM PAGES pages of results
     -c, --color                      Force color output
     -x, --expand                     Expand all results into web page text
     -e, --elinks                     Open results in elinks
-    -l, --less                       Open results in less
+    -i, --interactive                Prompt for selection
     -v, --vim                        Open results in Vim and bind <leader>o to open URL on or after cursor
-    -i, --install-plugin             Install Goog as a Vim plugin
+        --install-plugin             Install Goog as a Vim plugin
+        --version                    Show version
 
 DATE RANGE options for -d option:
     h   last hour
@@ -74,7 +75,6 @@ In the GoogSearchResults buffer:
     CTRL-k          jumps to the previous URL
     <leader>o       open URL on or after cursor in default external web browser
     <leader>O       open URL on or after cursor in split Vim window using elinks, links, or lynx
-
 ```
 
 ## Motivation
