@@ -165,7 +165,8 @@ if options[:interactive]
     end
     n = s[/\d+/,0].to_i
     pipe = s[/[|>].*$/,0] || '| less'
-    cmd = "elinks -dump -no-numbering '#{links[n - 1]}' #{pipe}"
+    link = links[n - 1]
+    cmd = "(echo \"#{link}\n\n\"; elinks -dump -no-numbering '#{link}') #{pipe}"
     system cmd
   }
 end
