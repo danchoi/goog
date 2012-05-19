@@ -158,13 +158,15 @@ if options[:less]
   $stdout = STDOUT
   loop {
     puts File.read($tempfile.path)
-    print "Show result number: "
-    n = STDIN.gets
-    if n !~ /\d/
+    print "Show result number (may add pipe or redirect after, like `> file.txt`. `| less` is default): "
+    s = STDIN.gets
+    if s !~ /\d/
       exit
     end
-    n = n.to_i
-    system "elinks -dump -no-numbering '#{links[n - 1]}' | less"
+    n = s[/\d+/,0].to_i
+    pipe = s[/[|>].*$/,0] || '| less'
+    cmd = "elinks -dump -no-numbering '#{links[n - 1]}' #{pipe}"
+    system cmd
   }
 end
 
