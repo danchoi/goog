@@ -93,7 +93,7 @@ query = "/search?q=#{CGI.escape query}"
 if options[:date_range]
   query += "&as_qdr=#{options[:date_range]}"
 end
-pages = []
+links = []
 (1..(options[:pages] || 1)).each do |page| 
   if query.nil?
     exit
@@ -108,6 +108,7 @@ pages = []
     if link !~ /^https?:/
       link = "http://google.com#{link}"
     end
+    links << link
     title = li.at('h3 a').inner_text
     description = li.at('div.s')
     excerpt = if description
@@ -129,15 +130,15 @@ pages = []
     else
       ["#{number}. #{title}", excerpt, link].compact
     end
-    puts '-' * 80
     $stdout.puts res
     $stdout.puts
     if options[:expand]
       $stderr.puts "Fetching #{title}: #{link}"
       puts "#{title}: #{link}"
       puts `elinks -dump -no-numbering '#{link}'`
+      puts '-' * 80
+      puts
     end
-    puts
   }
 
   # find next page link
@@ -154,7 +155,17 @@ end
 
 if options[:less]
   $stdout.close
-  exec "less -R #{$tempfile.path}"
+  $stdout = STDOUT
+  loop {
+    puts File.read($tempfile.path)
+    print "Show result number: "
+    n = STDIN.gets
+    if n !~ /\d/
+      exit
+    end
+    n = n.to_i
+    system "elinks -dump -no-numbering '#{links[n - 1]}' | less"
+  }
 end
 
 if options[:elinks]
