@@ -22,7 +22,6 @@ if ! exists("g:text_web_browser")
 end
 
 
-let s:web_page_bufname = "GoogWeb"
 
 func! s:open_href_under_cursor(text_browser)
   let res = search(s:http_link_pattern, 'cw')
@@ -35,11 +34,7 @@ func! s:open_href_under_cursor(text_browser)
       let command = g:text_web_browser . ' ' .  shellescape(href) . " "
       " echom command
       let result = system(command)
-      if bufexists(s:web_page_bufname) && bufwinnr(s:web_page_bufname) != -1
-        exec bufwinnr(s:web_page_bufname)."wincmd w "
-      else
-        exec "split ".s:web_page_bufname
-      endif
+      exec "split ".tempname()
       silent! put! =result
       silent! 1put! ='URL: '.href 
       silent! 2put! =''

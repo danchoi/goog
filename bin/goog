@@ -52,13 +52,11 @@ END
   opts.on("-d", '--date-range [DATE RANGE]', 'Show results for date range. See below for options.') {|dr| options[:date_range] = dr }
   opts.on("-n", '--num-pages [NUM PAGES]', 'Show NUM PAGES pages of results') {|pages| options[:pages] = pages.to_i }
   opts.on("-c", '--color', 'Force color output') {options[:color] = true}
-  opts.on("-v", '--vim', 'Open results in Vim and bind <leader>o to open URL on or after cursor') {
-    require 'tempfile'
-    options[:vim] = true
-    $tempfile = Tempfile.new('goog')
-    $stdout = $tempfile
-  }
-  opts.on("-i", '--install-plugin', 'Install Goog as a Vim plugin') {
+  opts.on("-x", '--expand', 'Expand all results into web page text') { options[:expand] = true }
+  opts.on("-e", '--elinks', 'Open results in elinks') { options[:elinks] = true }
+  opts.on("-i", '--interactive', 'Prompt for selection') { options[:interactive] = true }
+  opts.on("-v", '--vim', 'Open results in Vim and bind <leader>o to open URL on or after cursor') { options[:vim] = true }
+  opts.on('--install-plugin', 'Install Goog as a Vim plugin') {
     puts "Installing goog.vim into your ~/.vim/plugin directory."
     `cp #{$vimscript_file} #{ENV['HOME']}/.vim/plugin/`
     puts "Done. Type goog -h for Vim commands."
@@ -74,6 +72,13 @@ END
     exit
   }
 end.parse!
+
+if options[:elinks] || options[:vim] || options[:interactive]
+  require 'tempfile'
+  $tempfile = Tempfile.new('goog')
+  $stdout = $tempfile
+end
+
 query = ARGV.join(' ')
 unless query
   abort "Please provide a search query"
@@ -88,6 +93,7 @@ query = "/search?q=#{CGI.escape query}"
 if options[:date_range]
   query += "&as_qdr=#{options[:date_range]}"
 end
+links = []
 (1..(options[:pages] || 1)).each do |page| 
   if query.nil?
     exit
@@ -102,6 +108,7 @@ end
     if link !~ /^https?:/
       link = "http://google.com#{link}"
     end
+    links << link
     title = li.at('h3 a').inner_text
     description = li.at('div.s')
     excerpt = if description
@@ -116,13 +123,22 @@ end
                 end
               end
     number = (page - 1) * 10 + (index + 1)
-    res = if !options[:vim] && (STDOUT.tty? || options[:color])
-      ["#{number}. \e[36m#{title}\e[0m", excerpt, "\e[35m#{link }\e[0m"]
+    res = if options[:elinks]
+      %Q| <p>#{number}. <strong>#{title}</strong><br/>#{excerpt}<br/><a href='#{link}'>#{link}</a></p> |
+    elsif !options[:vim] && (STDOUT.tty? || options[:interactive] || options[:color])
+      ["#{number}. \e[36m#{title}\e[0m", excerpt, "\e[35m#{link }\e[0m"].compact
     else
-      ["#{number}. #{title}", excerpt, link]
+      ["#{number}. #{title}", excerpt, link].compact
     end
-    $stdout.puts res.compact
+    $stdout.puts res
     $stdout.puts
+    if options[:expand]
+      $stderr.puts "Fetching #{title}: #{link}"
+      puts "#{title}: #{link}"
+      puts `elinks -dump -no-numbering '#{link}'`
+      puts '-' * 80
+      puts
+    end
   }
 
   # find next page link
@@ -135,5 +151,28 @@ end
 if options[:vim]
   $stdout.close
   exec "vim -S #$vimscript_file -c 'call g:Goog_set_up_search_results_buffer()' #{$tempfile.path}"
+end
+
+if options[:interactive]
+  $stdout.close
+  $stdout = STDOUT
+  loop {
+    puts File.read($tempfile.path)
+    print "Show result number (may add pipe or redirect after, like `> file.txt`. `| less` is default): "
+    s = STDIN.gets
+    if s !~ /\d/
+      exit
+    end
+    n = s[/\d+/,0].to_i
+    pipe = s[/[|>].*$/,0] || '| less'
+    link = links[n - 1]
+    cmd = "(echo \"#{link}\n\n\"; elinks -dump -no-numbering '#{link}') #{pipe}"
+    system cmd
+  }
+end
+
+if options[:elinks]
+  $stdout.close
+  exec "mv #{$tempfile.path}{,.html} && elinks #{$tempfile.path}.html"
 end
 
