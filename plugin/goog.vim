@@ -4,7 +4,7 @@
 " License: MIT License (c) 2012 Daniel Choi
 
 if exists('g:GoogLoaded')
-  finish
+"  finish
 endif
 let g:GoogLoaded = 1
 
@@ -82,13 +82,12 @@ func! s:run_Goog_search(query)
   let g:Goog_running_in_vim = 1
   if !executable("goog") 
     echom "You don't have goog installed. Please gem install goog and try again."
-    finish
   endif
   let res=system("goog ".shellescape(a:query))
-  exec "split GoogSearchResults"
+  exec "new ".tempname()
+  silent! put! =res
   silent! put! =res
   silent! 1put! ='query: 'query
-  silent! 2put! =''
   setlocal buftype=nofile 
   normal 1G
   call g:Goog_set_up_search_results_buffer()
