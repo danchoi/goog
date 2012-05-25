@@ -131,7 +131,7 @@ links = []
       ["#{number}. #{title}", excerpt, link].compact
     end
     $stdout.puts res
-    $stdout.puts
+    $stdout.puts unless options[:interactive]
     if options[:expand]
       $stderr.puts "Fetching #{title}: #{link}"
       puts "#{title}: #{link}"
