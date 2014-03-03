@@ -7,6 +7,17 @@ require 'uri'
 require 'optparse'
 
 $vimscript_file = File.expand_path(File.join(File.dirname(__FILE__), '..', 'plugin', 'goog.vim'))
+
+html_dump_program = if (`which w3m` != "")
+                      "w3m -dump"
+                    elsif (`which elinks` != "")
+                      "elinks -dump -no-numbering"
+                    elsif (`which links` != "")
+                      "links -dump"
+                    elsif (`which lynx` != "")
+                      "lynx -dump -nonumber"
+                    end
+
 orig_query = "query: #{ARGV.join(' ')}\n\n"
 options = {}
 OptionParser.new do |opts|
@@ -24,7 +35,7 @@ DATE RANGE options for -d option:
 
 VIM KEY MAPPINGS
     <leader>o       open URL on or after cursor in default external web browser
-    <leader>O       open URL on or after cursor in split Vim window using elinks, links, or lynx
+    <leader>O       open URL on or after cursor in split Vim window using w3m, elinks, links, or lynx
 
 VIM PLUGIN COMMANDS
 
@@ -41,7 +52,7 @@ In the GoogSearchResults buffer:
     CTRL-j          jumps to the next URL
     CTRL-k          jumps to the previous URL
     <leader>o       open URL on or after cursor in default external web browser
-    <leader>O       open URL on or after cursor in split Vim window using elinks, links, or lynx
+    <leader>O       open URL on or after cursor in split Vim window using w3m, elinks, links, or lynx
 
 goog #{Goog::VERSION}
 http://github.com/danchoi/goog
@@ -53,7 +64,7 @@ END
   opts.on("-n", '--num-pages [NUM PAGES]', 'Show NUM PAGES pages of results') {|pages| options[:pages] = pages.to_i }
   opts.on("-c", '--color', 'Force color output') {options[:color] = true}
   opts.on("-x", '--expand', 'Expand all results into web page text') { options[:expand] = true }
-  opts.on("-e", '--elinks', 'Open results in elinks') { options[:elinks] = true }
+  opts.on("-e", '--elinks', 'Open results in text browser') { options[:elinks] = true }
   opts.on("-i", '--interactive', 'Prompt for selection') { options[:interactive] = true }
   opts.on("-v", '--vim', 'Open results in Vim and bind <leader>o to open URL on or after cursor') { options[:vim] = true }
   opts.on('--install-plugin', 'Install Goog as a Vim plugin') {
@@ -135,7 +146,7 @@ links = []
     if options[:expand]
       $stderr.puts "Fetching #{title}: #{link}"
       puts "#{title}: #{link}"
-      puts `elinks -dump -no-numbering '#{link}'`
+      puts `#{html_dump_program} '#{link}'`
       puts '-' * 80
       puts
     end
@@ -166,13 +177,13 @@ if options[:interactive]
     n = s[/\d+/,0].to_i
     pipe = s[/[|>].*$/,0] || '| less'
     link = links[n - 1]
-    cmd = "(echo \"#{link}\n\n\"; elinks -dump -no-numbering '#{link}') #{pipe}"
+    cmd = "(echo \"#{link}\n\n\"; #{html_dump_program} '#{link}') #{pipe}"
     system cmd
   }
 end
 
 if options[:elinks]
   $stdout.close
-  exec "mv #{$tempfile.path}{,.html} && elinks #{$tempfile.path}.html"
+  exec "mv #{$tempfile.path}{,.html} && #{html_dump_program.split(' ')[0]} #{$tempfile.path}.html"
 end
 

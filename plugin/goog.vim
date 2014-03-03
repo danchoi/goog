@@ -12,7 +12,9 @@ let s:http_link_pattern = '^https\?:[^ >)\]]\+'
 
 let g:gui_web_browser = system("echo -n $(which gnome-open || which open)")
 if ! exists("g:text_web_browser")
-  if executable("elinks") 
+  if executable("w3m") 
+    let  g:text_web_browser = 'w3m -dump'
+  elseif executable("elinks")
     let  g:text_web_browser = 'elinks -dump -no-numbering'
   elseif executable("lynx")
     let  g:text_web_browser = 'lynx -dump -nonumbers'
